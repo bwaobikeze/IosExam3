@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C3678922B06D7C40075653C /* Classifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C3678912B06D7C40075653C /* Classifier.swift */; };
+		3C3678942B06D7F20075653C /* imageclassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C3678932B06D7F20075653C /* imageclassifier.swift */; };
 		3C9271A12B06C28200B7CF13 /* Exam3_Waobikeze_BrianApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C9271A02B06C28200B7CF13 /* Exam3_Waobikeze_BrianApp.swift */; };
 		3C9271A32B06C28200B7CF13 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C9271A22B06C28200B7CF13 /* ContentView.swift */; };
 		3C9271A52B06C28400B7CF13 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C9271A42B06C28400B7CF13 /* Assets.xcassets */; };
@@ -43,6 +45,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3C3678912B06D7C40075653C /* Classifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Classifier.swift; sourceTree = "<group>"; };
+		3C3678932B06D7F20075653C /* imageclassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = imageclassifier.swift; sourceTree = "<group>"; };
 		3C92719D2B06C28200B7CF13 /* Exam3_Waobikeze_Brian.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Exam3_Waobikeze_Brian.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C9271A02B06C28200B7CF13 /* Exam3_Waobikeze_BrianApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exam3_Waobikeze_BrianApp.swift; sourceTree = "<group>"; };
 		3C9271A22B06C28200B7CF13 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -98,6 +102,8 @@
 				3C9271A22B06C28200B7CF13 /* ContentView.swift */,
 				3C9271A42B06C28400B7CF13 /* Assets.xcassets */,
 				3C9271A62B06C28400B7CF13 /* Preview Content */,
+				3C3678912B06D7C40075653C /* Classifier.swift */,
+				3C3678932B06D7F20075653C /* imageclassifier.swift */,
 			);
 			path = Exam3_Waobikeze_Brian;
 			sourceTree = "<group>";
@@ -231,7 +237,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C3678942B06D7F20075653C /* imageclassifier.swift in Sources */,
 				3C9271A32B06C28200B7CF13 /* ContentView.swift in Sources */,
+				3C3678922B06D7C40075653C /* Classifier.swift in Sources */,
 				3C9271A12B06C28200B7CF13 /* Exam3_Waobikeze_BrianApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
