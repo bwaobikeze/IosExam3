@@ -51,7 +51,7 @@ struct Classifier {
         
         let request = VNRecognizeTextRequest()
         
-        request.recognitionLevel = .fast
+        request.recognitionLevel = .accurate
         
         let handler = VNImageRequestHandler(ciImage: ciImage, options: [:])
         

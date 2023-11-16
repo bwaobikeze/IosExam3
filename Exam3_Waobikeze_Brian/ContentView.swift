@@ -19,10 +19,11 @@ struct ContentView: View {
     @State private var avatarImage: UIImage?
     @State private var intensity = 0.25
     @State private var tempImage: UIImage?
+    @ObservedObject var classifier: ImageClassifier
     let context = CIContext()
     var body: some View {
         VStack {
-            Text("ML Model Vs Image Filters").font(Font.system(size: 25))
+            Text("TXT Recongnition Vs Image Filters").font(Font.system(size: 25))
             Spacer()
         Picker(selection: $filter) {
             ForEach(filterarr, id: \.self) { filtered in
@@ -32,8 +33,7 @@ struct ContentView: View {
                             
             }.pickerStyle(.segmented)
                 .onChange(of: filter) {
-                    tempImage = imagearray[imageidx]
-                    let beginImage = CIImage(image:imagearray[imageidx])
+                    let beginImage = CIImage(image: tempImage ?? UIImage())
                     blurFilter.setValue(beginImage, forKey: kCIInputImageKey)
                     binarizeFilter.setValue(beginImage, forKey: kCIInputImageKey)
                     applyProcessing()
@@ -41,56 +41,105 @@ struct ContentView: View {
             Image(uiImage: imagearray[imageidx])
                 .resizable()
                 .scaledToFit()
-                //.aspectRatio(250.250, contentMode: .fill)
+                .onAppear{
+                    classifier.detectTxt(uiImage: imagearray[imageidx] )
+                    tempImage = imagearray[imageidx]
+                }
 
             HStack{
-                Button(action: {}, label: {
+                Button(action: {
+                    randomImage()
+                }, label: {
                     Image(systemName: "photo")
                 })
                 Spacer()
-                Button(action: {}, label: {
+                Button(action: {
+                    add75()
+                }, label: {
                     Text("+75%")
-                })
+                }).disabled(filter == "Original")
                 Spacer()
 
                 Button(action: {
                     add25()
                 }) {
                     Text("+25%")
-                }//.disabled(filter == "Original")
+                }.disabled(filter == "Original")
             }.padding()
             Spacer()
+            Group {
+                if let imageClass = classifier.imageText {
+                    HStack {
+                        Text(imageClass)
+                            .bold()
+                            .lineLimit(10)
+                    }
+                    .foregroundStyle(.black)
+                } else {
+                    HStack {
+                        Text("Unable to identify objects")
+                            .font(.system(size: 26))
+                    }
+                    .foregroundStyle(.red)
+                }
+            }
+            .font(.subheadline)
+            .padding()
             Spacer()
         }
         .padding()
     }
+    func randomImage(){
+        let newIndex = Int.random(in: 0..<imagearray.count)
+        imageidx = newIndex
+        classifier.detectTxt(uiImage: imagearray[imageidx] )
+        tempImage = imagearray[imageidx]
+        applyProcessing()
+    }
     func add25() {
-//        if filter == "Binarized" {
-//            let currentradius = binarizeFilter.threshold
-//            binarizeFilter.threshold = currentradius * 0.25
-//            guard let outputImage = binarizeFilter.outputImage else { return }
-//            if let cgimage = context.createCGImage(outputImage, from: outputImage.extent) {
-//                let uiimage = UIImage(cgImage: cgimage)
-//                avatarImage = uiimage
-//            }
-//        }else if filter == "Blur" {
-//            let currentradius = blurFilter.radius
-//            blurFilter.radius = currentradius * 0.25
-//            guard let outputImage = blurFilter.outputImage else { return }
-//            if let cgimage = context.createCGImage(outputImage, from: outputImage.extent) {
-//                let uiimage = UIImage(cgImage: cgimage)
-//                avatarImage = uiimage
-//            }
-//            
-//        }
+        if filter == "Binarized" {
+            let currentradius = binarizeFilter.threshold
+            binarizeFilter.threshold = currentradius * 0.25
+            guard let outputImage = binarizeFilter.outputImage else { return }
+            if let cgimage = context.createCGImage(outputImage, from: outputImage.extent) {
+                let uiimage = UIImage(cgImage: cgimage)
+                imagearray[imageidx] = uiimage
+            }
+        }else if filter == "Blur" {
+            let currentradius = blurFilter.radius
+            blurFilter.radius = currentradius * 0.25
+            guard let outputImage = blurFilter.outputImage else { return }
+            if let cgimage = context.createCGImage(outputImage, from: outputImage.extent) {
+                let uiimage = UIImage(cgImage: cgimage)
+                imagearray[imageidx] = uiimage
+            }
+            
+        }
         
     }
     func add75() {
-        imagearray[imageidx] = tempImage ?? UIImage()
-        return
+                if filter == "Binarized" {
+                    let currentradius = binarizeFilter.threshold
+                    binarizeFilter.threshold = currentradius * 0.75
+                    guard let outputImage = binarizeFilter.outputImage else { return }
+                    if let cgimage = context.createCGImage(outputImage, from: outputImage.extent) {
+                        let uiimage = UIImage(cgImage: cgimage)
+                        imagearray[imageidx]  = uiimage
+                    }
+                }else if filter == "Blur" {
+                    let currentradius = blurFilter.radius
+                    blurFilter.radius = currentradius * 0.75
+                    guard let outputImage = blurFilter.outputImage else { return }
+                    if let cgimage = context.createCGImage(outputImage, from: outputImage.extent) {
+                        let uiimage = UIImage(cgImage: cgimage)
+                        imagearray[imageidx] = uiimage
+                    }
+        
+                }
     }
     func applyProcessing() {
         if filter == "Original" {
+            imagearray[imageidx] = tempImage ?? UIImage()
             return
         }else if filter == "Blur" {
             blurFilter.radius = Float(10*intensity)
@@ -98,7 +147,6 @@ struct ContentView: View {
             if let cgimage = context.createCGImage(outputImage, from: outputImage.extent) {
                 let uiimage = UIImage(cgImage: cgimage)
                 imagearray[imageidx] = uiimage
-                //avatarImage = uiimage
             }
         } else if filter == "Binarized" {
             binarizeFilter.threshold = Float(0.5 * intensity)
@@ -106,7 +154,6 @@ struct ContentView: View {
             if let cgimage = context.createCGImage(outputImage, from: outputImage.extent) {
                 let uiimage = UIImage(cgImage: cgimage)
                 imagearray[imageidx] = uiimage
-                //avatarImage = uiimage
             }
         }
     }
@@ -114,5 +161,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ContentView(classifier: ImageClassifier())
 }

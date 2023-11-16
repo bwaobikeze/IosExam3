@@ -11,7 +11,7 @@ import SwiftUI
 struct Exam3_Waobikeze_BrianApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(classifier: ImageClassifier())
         }
     }
 }
